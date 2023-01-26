@@ -6,9 +6,10 @@ let food = { x: 15, y: 15 };
 let score = 0;
 let highScore = localStorage.getItem("highScore");
 let hiScoreElem = document.getElementById("hiScore");
+console.log(highScore);
 
 function main(ctime) {
-  //   window.requestAnimationFrame(main);
+  window.requestAnimationFrame(main);
   if ((ctime - lastPaintTime) / 1000 < 1 / speed) {
     return;
   }
@@ -18,7 +19,6 @@ function main(ctime) {
 
 function gameEngine() {
   const board = document.getElementById("board");
-  //   hiScoreElem.innerHTML = "High score: " + highScore > 0 ? highScore : 0;
 
   //   Display snake
   board.innerHTML = "";
@@ -80,14 +80,11 @@ function gameEngine() {
   //   Bumping itself
   for (let i = 1; i < snake.length; i++) {
     if (snake[0].x === snake[i].x && snake[0].y === snake[i].y) {
-      alert("Game over!!!");
-      if (score > highScore) {
-        localStorage.setItem("highScore", score);
+      if (score > JSON.parse(highScore)) {
+        localStorage.setItem("highScore", JSON.stringify(score));
         hiScoreElem.innerHTML = "High score: " + score;
-      } else {
-        hiScoreElem.innerHTML = "High score: " + highScore;
       }
-
+      alert(`Game over!!! Your score is: ${score}`);
       score = 0;
       speed = 7;
       snake = [{ x: 10, y: 10 }];
@@ -97,8 +94,52 @@ function gameEngine() {
 if (highScore === null) {
   localStorage.setItem("highScore", JSON.stringify(0));
 } else {
-  hiScoreElem.innerHTML = "High score: " + highScore;
+  hiScoreElem.innerHTML = "High score: " + JSON.parse(highScore);
 }
+
+console.log(score, highScore);
+
+let upKey = document.getElementById("up");
+let leftKey = document.getElementById("left");
+let downKey = document.getElementById("down");
+let rightKey = document.getElementById("right");
+
+upKey.addEventListener("click", function () {
+  var event = new KeyboardEvent("keydown", {
+    bubbles: true,
+    cancelable: true,
+    key: "ArrowUp",
+    code: "ArrowUp",
+  });
+  document.dispatchEvent(event);
+});
+leftKey.addEventListener("click", function () {
+  var event = new KeyboardEvent("keydown", {
+    bubbles: true,
+    cancelable: true,
+    key: "ArrowLeft",
+    code: "ArrowLeft",
+  });
+  document.dispatchEvent(event);
+});
+downKey.addEventListener("click", function () {
+  var event = new KeyboardEvent("keydown", {
+    bubbles: true,
+    cancelable: true,
+    key: "ArrowDown",
+    code: "ArrowDown",
+  });
+  document.dispatchEvent(event);
+});
+rightKey.addEventListener("click", function () {
+  var event = new KeyboardEvent("keydown", {
+    bubbles: true,
+    cancelable: true,
+    key: "ArrowRight",
+    code: "ArrowRight",
+  });
+  document.dispatchEvent(event);
+});
 
 window.requestAnimationFrame(main);
 window.addEventListener("keydown", (e) => {
